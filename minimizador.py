@@ -1,22 +1,19 @@
 from itertools import combinations
 
-# Função principal que aplica o algoritmo de minimização Myhill-Nerode
-
-
 def minimizar_afd(afd):
     estados = afd['estados']
     finais = set(afd['finais'])
     trans = afd['transicoes']
     alfabeto = afd['alfabeto']
 
-    # Etapa 1: criar pares de estados e marcar os distintamente finais
+    # cria pares de estados e marcar os distintamente finais
     tabela = {}
     pares = list(combinations(estados, 2))
 
     for (p, q) in pares:
         tabela[(p, q)] = (p in finais) != (q in finais)
 
-    # Etapa 2: propaga distinções com base nas transições
+    # propaga distinções com base nas transições
     alterado = True
     while alterado:
         alterado = False
@@ -34,7 +31,7 @@ def minimizar_afd(afd):
                     alterado = True
                     break
 
-    # Etapa 3: agrupar estados não distinguidos (equivalentes)
+    # agrupar estados não distinguidos (equivalentes)
     grupos = []
     for estado in estados:
         encontrado = False
@@ -46,7 +43,7 @@ def minimizar_afd(afd):
         if not encontrado:
             grupos.append([estado])
 
-    # Etapa 4: construir novo AFD com os grupos formados
+    # constói novo afd
     novo_estado = {}
     for grupo in grupos:
         nome = "_".join(sorted(grupo))
@@ -67,3 +64,4 @@ def minimizar_afd(afd):
         novo_afd['transicoes'][(novo_o, simbolo)] = novo_d
 
     return novo_afd, grupos
+
